@@ -55,27 +55,27 @@ struct hash_map {
     while (true) {
       state status = H[i].status;
       if (status == full || status == tomb) {
-	if (H[i].key == k) {
-	  if (status == full) return false;
-	  else if (H[i].status.compare_exchange_strong(status, locked)) {
-	    H[i].value = v;
-	    H[i].status = full;
-	    return true;	    
-	  }
-	} else {
-	  if (count++ == std::min(1000l,m)) {
-	    std::cout << "Hash table overfull" << std::endl;
-	    return false;
-	  }
-	  i = next_index(i);
-	}
-      } else if (status == empty) {
-	if (H[i].status.compare_exchange_strong(status, locked)) {
-	  H[i].key = k;
-	  H[i].value = v;
-	  H[i].status = full;
-	  return true;
-	}
+        if (H[i].key == k) {
+          if (status == full) return false;
+          else if (H[i].status.compare_exchange_strong(status, locked)) {
+            H[i].value = v;
+            H[i].status = full;
+            return true;	    
+          }
+        } else {
+          if (count++ == std::min(1000l,m)) {
+            std::cout << "Hash table overfull" << std::endl;
+            return false;
+          }
+          i = next_index(i);
+        }
+            } else if (status == empty) {
+        if (H[i].status.compare_exchange_strong(status, locked)) {
+          H[i].key = k;
+          H[i].value = v;
+          H[i].status = full;
+          return true;
+        }
       }
     }
   }
