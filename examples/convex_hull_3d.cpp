@@ -34,6 +34,8 @@ int main(int argc, char* argv[]) {
       t.next("convex_hull_3d");
     }
 
+    std::cout << parlay::num_workers() << std::endl;
+
     // print all points info
     std::ofstream inFile("convex_hull.in");
     if (!inFile.is_open()) {
